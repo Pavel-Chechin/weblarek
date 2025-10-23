@@ -1,6 +1,7 @@
 import { ICustomer, IErrors, TPayment } from '../../types/index.ts'
+import { EventEmitter } from "../base/Events";
 
-export class Customer {
+export class Customer extends EventEmitter {
   private payment: TPayment = 'card';
   private email: string = '';
   private phone: string = '';
@@ -15,18 +16,22 @@ export class Customer {
 
   setPayment(value: TPayment) { 
     this.payment = value; 
+    this.emit('form:errors', this.validateData());
   }
 
   setEmail(value: string) {
     this.email = value;
+    this.emit('form:errors', this.validateData());
   }
 
   setPhone(value: string) {
     this.phone = value;
+    this.emit('form:errors', this.validateData());
   }
 
   setAddress(value: string) {
     this.address = value;
+    this.emit('form:errors', this.validateData());
   }
 
   getData(): ICustomer {
@@ -64,6 +69,7 @@ export class Customer {
       errors.address = 'Не указан адрес доставки';
     }
 
+    this.emit('form:errors', errors);
     return errors;
   }
 }

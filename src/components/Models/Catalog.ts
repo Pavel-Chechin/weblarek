@@ -1,11 +1,13 @@
 import { IProduct } from '../../types/index.ts';
+import { EventEmitter } from "../base/Events";
 
-export class Catalog {
+export class Catalog extends EventEmitter {
   private productsList: IProduct [] = [];
   private selectedProduct: IProduct | null = null;
 
   setProductsList(products: IProduct[]): void {
     this.productsList = products;
+    this.emit('catalog:changed', this.getProductsList())
   }
 
   getProductsList(): IProduct [] {
