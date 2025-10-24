@@ -17,8 +17,8 @@ export class Form<T = {}> extends Component<TForm & T> {
     : ensureElement<HTMLFormElement>('.form', this.container);
     this.nextButton = ensureElement<HTMLButtonElement>('button[type="submit"]', this.container);
     
-    this.nextButton.addEventListener('click', (e) => {
-      e.preventDefault();
+    this.formElement.addEventListener('submit', (e) => { 
+      e.preventDefault(); 
       if (this.nextButton.disabled) return;
       this.events.emit('order:next');
     });

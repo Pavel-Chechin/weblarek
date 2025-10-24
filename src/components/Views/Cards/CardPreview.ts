@@ -53,10 +53,12 @@ export class CardPreview extends Card<TCardPreview> {
     if (this.price === null) {
       this.disableButton();
     } else if (value) {
+      
       this.cardButton.setAttribute('data-in-cart', 'true');
       this.cardButton.textContent = 'Удалить из корзины';
       this.cardButton.disabled = false;
     } else {
+
       this.cardButton.removeAttribute('data-in-cart');
       this.cardButton.textContent = 'Купить';
       this.cardButton.disabled = false;

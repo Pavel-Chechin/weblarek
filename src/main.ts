@@ -52,10 +52,10 @@ const basket = new Basket(events, cloneTemplate(basketTmpl));
 const orderForm = new OrderForm(events, cloneTemplate(orderFormTmpl));
 const contactsForm = new ContactsForm(events, cloneTemplate(contactsFormTmpl));
 const successfulOrder = new SuccessfulOrder(events, cloneTemplate(successfulOrderTmpl));
+const cardPreview = new CardPreview(events, cloneTemplate(cardPreviewTmpl));
 
 function renderCatalog() {
   const products = productsModel.getProductsList();
-  console.log(products);
   const items = products.map((item) => {
     const card = new CardCatalog(events, cloneTemplate(cardCatalogTmpl));
     return card.render({
@@ -77,7 +77,7 @@ events.on('card:open', (data: { card: string }) => {
   const product = productsModel.getProductById(data.card);
   if (!product) return;
 
-  const cardPreview = new CardPreview(events, cloneTemplate(cardPreviewTmpl));
+  
   const inCart = cartModel.hasProduct(product.id);
 
   const previewData = {
@@ -135,27 +135,14 @@ events.on('basket:open', () => {
 
 cartModel.on('basket:changed', () => {
   header.counter = cartModel.getTotalProducts();
-  console.log(header.counter);
-  console.log(cartModel.getTotalProducts());
   renderBasket();
-  
-  const currentPreview = document.querySelector('.modal_active .card_full');
-  if (currentPreview) {
-    const productId = currentPreview.id;
+  if (cardPreview) {
+    const productId = cardPreview.id;
     const inCart = cartModel.hasProduct(productId);
-    const button = currentPreview.querySelector('.card__button') as HTMLButtonElement;
-    
-    if (button) {
-      button.textContent = inCart ? 'Удалить из корзины' : 'Купить';
-    
-      if (inCart) {
-        button.setAttribute('data-in-cart', 'true');
-      } else {
-        button.removeAttribute('data-in-cart');
-      }
+    cardPreview.inCart = inCart;
     }
   }
-});
+);
 
 events.on('basket:ready', () => {
   if (cartModel.getTotalProducts() === 0) {
